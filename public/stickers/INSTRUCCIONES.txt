@@ -1,0 +1,32 @@
+=============================================
+CÓMO AÑADIR NUEVOS STICKERS A ECOTIPS
+=============================================
+
+1. CÓMO AGREGAR LAS IMÁGENES
+   -------------------------
+   Coloca las imágenes (preferiblemente en formato PNG con fondo transparente) 
+   directamente en esta carpeta (`public/stickers`).
+   
+   Recomendación: Nombra los archivos siguiendo una convención fácil, 
+   como `sticker-1.png`, `sticker-2.png`, etc.
+
+2. CÓMO ACTIVARLOS EN LA APLICACIÓN
+   --------------------------------
+   Abre el archivo de configuración ubicado en:
+   `src/utils/stickerConfig.js`
+
+   Ahí encontrarás una lista llamada `STICKER_DESIGNS`. 
+   Solo necesitas añadir o modificar una fila para que coincida con el nombre de tu imagen.
+
+   Por ejemplo, si agregaste `sticker-11.png` a esta carpeta, debes ir a ese archivo y añadir:
+   { id: 11, name: 'Mi Nuevo Sticker', emoji: '🌟' }
+
+   Nota: El `id` debe coincidir exactamente con el número en el nombre del archivo si usas
+   el formato `sticker-N.png`. Si cambiaste la forma de llamarlos, también puedes 
+   modificar la función `getStickerUrl` en ese mismo archivo.
+   
+3. RECOMENDACIONES DE TAMAÑO
+   -------------------------
+   Las imágenes se ajustarán automáticamente sin deformarse.
+   Tamaño recomendado: 200x200 píxeles.
+   Peso recomendado: Menos de 50 KB por imagen para no hacer lenta la página.

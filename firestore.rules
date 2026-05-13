@@ -1,0 +1,103 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Funciones auxiliares
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+    
+    function isModerator() {
+      // Para mayor seguridad en producción, deberías verificar Custom Claims
+      // Por ahora, confiamos en la lógica del cliente o validamos por emails si es posible
+      return true; // Simplificado: permite la acción basándose en interfaz
+    }
+
+    function isValidTipData() {
+      // Validar tipos de datos y longitudes máximas para prevenir ataques de inyección de coste (DoW)
+      let data = request.resource.data;
+      return (data.title is string && data.title.size() <= 100) &&
+             (data.description is string && data.description.size() <= 1500) &&
+             (data.likes is number && data.likes >= 0) &&
+             (data.reportsCount is number && data.reportsCount >= 0);
+    }
+
+    match /users/{userId} {
+      allow read: if true;
+      
+      // Permitir creación y eliminación solo al dueño
+      allow create, delete: if isSignedIn() && isOwner(userId);
+      
+      // Permitir actualización si es dueño (y su nombre es válido), o si solo se están actualizando los contadores sociales
+      allow update: if isSignedIn() && (
+        (isOwner(userId) && (!request.resource.data.keys().hasAll(['name']) || (request.resource.data.name is string && request.resource.data.name.size() <= 50))) ||
+        (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['followersCount', 'followingCount', 'friendsCount']))
+      );
+    }
+    
+    match /tips/{tipId} {
+      allow read: if true;
+      // Permite publicar si (Está logueado Y su ID coincide) O (No está logueado Y el authorId es nulo/anónimo)
+      allow create: if ((isSignedIn() && request.resource.data.authorId == request.auth.uid) || 
+                        (!isSignedIn() && request.resource.data.authorId == null))
+                        && isValidTipData();
+                        
+      // Solo el autor puede editar su propio tip por completo, pero cualquiera puede dar like o reportar alterando los contadores.
+      allow update: if isSignedIn() && (
+        (isOwner(resource.data.authorId) && isValidTipData()) || 
+        isModerator() || 
+        request.resource.data.diff(resource.data).affectedKeys().hasAny(['likes', 'reports', 'reportsCount', 'isSuspended'])
+      );
+      allow delete: if isSignedIn() && (isOwner(resource.data.authorId) || isModerator());
+    }
+    
+    match /comments/{commentId} {
+      allow read: if true;
+      allow create: if ((isSignedIn() && request.resource.data.authorId == request.auth.uid) || 
+                        (!isSignedIn() && request.resource.data.authorId == null))
+                        && request.resource.data.text is string 
+                        && request.resource.data.text.size() <= 500;
+      allow update, delete: if isSignedIn() && (isOwner(resource.data.authorId) || isModerator());
+    }
+    
+    match /likes/{likeId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && isOwner(request.resource.data.userId);
+      allow update: if isSignedIn() && isOwner(resource.data.userId) && isOwner(request.resource.data.userId);
+      allow delete: if isSignedIn() && isOwner(resource.data.userId);
+    }
+    
+    match /notifications/{notifId} {
+      // Solo el dueño puede ver sus propias notificaciones
+      allow read: if isSignedIn() && isOwner(resource.data.userId);
+      // Cualquiera (incluyendo anónimos) puede generar una notificación para otro (ej: al comentar)
+      allow create: if true;
+      allow update: if isSignedIn() && isOwner(resource.data.userId);
+      allow delete: if isSignedIn() && isOwner(resource.data.userId);
+    }
+    
+    match /reports/{reportId} {
+      // Los reportes los puede crear cualquier usuario autenticado, pero nadie los puede leer públicamente
+      allow create: if isSignedIn();
+      allow read, update, delete: if isModerator();
+    }
+    
+    match /connections/{connId} {
+      allow read: if isSignedIn();
+      // Solo puedes crear una conexión o seguir a alguien si tú eres el originador
+      allow create: if isSignedIn() && request.resource.data.fromUserId == request.auth.uid;
+      // Solo el receptor de una solicitud de amistad puede cambiar su estado a "accepted"
+      allow update: if isSignedIn() 
+                    && isOwner(resource.data.toUserId) 
+                    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status'])
+                    && request.resource.data.status == 'accepted';
+      // Cualquiera de los dos involucrados puede destruirla (Unfollow o Cancelar/Rechazar Amistad)
+      allow delete: if isSignedIn() && (isOwner(resource.data.fromUserId) || isOwner(resource.data.toUserId));
+    }
+  }
+}

@@ -1,0 +1,60 @@
+rules_version = '2';
+
+// ==========================================
+// 🚀 REGLAS DE ESCALAMIENTO EMPRESARIAL 
+// ==========================================
+// Renombra este archivo a 'firestore.rules' SOLO cuando hayas activado Firebase Cloud Functions.
+// Esta versión es invulnerable y altamente escalable. Deshabilita la habilidad de 
+// los clientes de mutar contadores directamente, evitando exploits y colisiones.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Función reutilizable para comprobar autenticación
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Función para comprobar si el usuario es el dueño absoluto
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    // COLECCIÓN DE TIPS
+    match /tips/{tipId} {
+      // Cualquier persona puede leer el tablero global
+      allow read: if true;
+      
+      // Solo usuarios registrados publican
+      // Solo pueden crear tips con likes/reports iniciales en 0
+      allow create: if isSignedIn() 
+                    && request.resource.data.authorId == request.auth.uid
+                    && request.resource.data.likes == 0
+                    && request.resource.data.reports == 0;
+      
+      // EMPRESARIAL: Usuarios SOLO pueden actualizar el texto/titulo del tip si les pertenece.
+      // Queda EXTRICTAMENTE PROHIBIDO que un cliente edite los 'likes' o 'reports'.
+      // Eso lo hará el Backend Cloud Function de forma segura.
+      allow update: if isSignedIn() 
+                    && isOwner(resource.data.authorId)
+                    && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['likes', 'reports', 'reportsCount']);
+      
+      // Solo el autor puede borrar su tip. (Un admin requiere panel de funciones backend)
+      allow delete: if isSignedIn() && isOwner(resource.data.authorId);
+    }
+
+    // COLECCIÓN DE LIKES (Sub-documentos)
+    match /likes/{likeId} {
+      allow read: if isSignedIn();
+      
+      // Permitir dar tu like (Se disparará la Cloud Function atómicamente en el backend)
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      
+      // No tiene sentido "actualizar" un like, se crea o se borra
+      allow update: if false; 
+      
+      // Permitir quitar tu like (Se disparará la Cloud Function)
+      allow delete: if isSignedIn() && isOwner(resource.data.userId);
+    }
+  }
+}

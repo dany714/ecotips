@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+  <rect width="600" height="600" fill="#bfdbfe"/>
+  <!-- Ruled lines -->
+  <g stroke="#2563eb" stroke-width="0.8" opacity="0.18">
+    <line x1="0" y1="50" x2="600" y2="50"/><line x1="0" y1="80" x2="600" y2="80"/>
+    <line x1="0" y1="110" x2="600" y2="110"/><line x1="0" y1="140" x2="600" y2="140"/>
+    <line x1="0" y1="170" x2="600" y2="170"/><line x1="0" y1="200" x2="600" y2="200"/>
+    <line x1="0" y1="230" x2="600" y2="230"/><line x1="0" y1="260" x2="600" y2="260"/>
+    <line x1="0" y1="290" x2="600" y2="290"/><line x1="0" y1="320" x2="600" y2="320"/>
+    <line x1="0" y1="350" x2="600" y2="350"/><line x1="0" y1="380" x2="600" y2="380"/>
+    <line x1="0" y1="410" x2="600" y2="410"/><line x1="0" y1="440" x2="600" y2="440"/>
+    <line x1="0" y1="470" x2="600" y2="470"/><line x1="0" y1="500" x2="600" y2="500"/>
+    <line x1="0" y1="530" x2="600" y2="530"/><line x1="0" y1="560" x2="600" y2="560"/>
+  </g>
+  <line x1="52" y1="0" x2="52" y2="600" stroke="#60a5fa" stroke-width="1.5" opacity="0.3"/>
+  <!-- Star constellation top-right -->
+  <circle cx="510" cy="45" r="4" fill="#3b82f6" opacity="0.5"/>
+  <circle cx="540" cy="30" r="3" fill="#3b82f6" opacity="0.4"/>
+  <circle cx="565" cy="55" r="3.5" fill="#3b82f6" opacity="0.4"/>
+  <circle cx="548" cy="70" r="2.5" fill="#3b82f6" opacity="0.35"/>
+  <circle cx="525" cy="72" r="2" fill="#3b82f6" opacity="0.35"/>
+  <g stroke="#93c5fd" stroke-width="1" opacity="0.35">
+    <line x1="510" y1="45" x2="540" y2="30"/>
+    <line x1="540" y1="30" x2="565" y2="55"/>
+    <line x1="565" y1="55" x2="548" y2="70"/>
+    <line x1="548" y1="70" x2="525" y2="72"/>
+    <line x1="525" y1="72" x2="510" y2="45"/>
+  </g>
+  <rect x="200" y="0" width="200" height="18" rx="3" fill="rgba(255,255,255,0.5)"/>
+</svg>

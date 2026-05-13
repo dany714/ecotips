@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+  <rect width="600" height="600" fill="#fbcfe8"/>
+  <!-- Ruled lines -->
+  <g stroke="#db2777" stroke-width="0.8" opacity="0.18">
+    <line x1="0" y1="50" x2="600" y2="50"/><line x1="0" y1="80" x2="600" y2="80"/>
+    <line x1="0" y1="110" x2="600" y2="110"/><line x1="0" y1="140" x2="600" y2="140"/>
+    <line x1="0" y1="170" x2="600" y2="170"/><line x1="0" y1="200" x2="600" y2="200"/>
+    <line x1="0" y1="230" x2="600" y2="230"/><line x1="0" y1="260" x2="600" y2="260"/>
+    <line x1="0" y1="290" x2="600" y2="290"/><line x1="0" y1="320" x2="600" y2="320"/>
+    <line x1="0" y1="350" x2="600" y2="350"/><line x1="0" y1="380" x2="600" y2="380"/>
+    <line x1="0" y1="410" x2="600" y2="410"/><line x1="0" y1="440" x2="600" y2="440"/>
+    <line x1="0" y1="470" x2="600" y2="470"/><line x1="0" y1="500" x2="600" y2="500"/>
+    <line x1="0" y1="530" x2="600" y2="530"/><line x1="0" y1="560" x2="600" y2="560"/>
+  </g>
+  <!-- Margin line -->
+  <line x1="52" y1="0" x2="52" y2="600" stroke="#f472b6" stroke-width="1.5" opacity="0.3"/>
+  <!-- Heart + flower doodle bottom-right -->
+  <path d="M530,505 C530,495 515,490 515,505 C515,518 530,528 530,528 C530,528 545,518 545,505 C545,490 530,495 530,505Z" fill="#ec4899" opacity="0.35"/>
+  <!-- Small flower -->
+  <circle cx="555" cy="555" r="10" fill="#f9a8d4" opacity="0.5"/>
+  <circle cx="555" cy="535" r="8" fill="#fbcfe8" opacity="0.5" stroke="#f472b6" stroke-width="1"/>
+  <circle cx="555" cy="575" r="8" fill="#fbcfe8" opacity="0.5" stroke="#f472b6" stroke-width="1"/>
+  <circle cx="535" cy="555" r="8" fill="#fbcfe8" opacity="0.5" stroke="#f472b6" stroke-width="1"/>
+  <circle cx="575" cy="555" r="8" fill="#fbcfe8" opacity="0.5" stroke="#f472b6" stroke-width="1"/>
+  <rect x="200" y="0" width="200" height="18" rx="3" fill="rgba(255,255,255,0.55)"/>
+</svg>

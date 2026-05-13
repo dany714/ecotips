@@ -1,0 +1,3 @@
+{"type":"danger","message":"Un moderador eliminó tu comentario: \"bien\" por incumplir las normas.","read":true,"createdAt":"2026-03-12T06:38:48.340Z","userId":"Ybx4mTr0NOORTvrVZJIF4fwvJpQ2"}
+{"read":false,"userId":"dHaC32aerpRANBHGXb4ZjtUsg2V2","createdAt":"2026-03-15T18:51:07.712Z","type":"danger","message":"Un moderador eliminó tu tip \"prueba\" por incumplir las normas de la comunidad."}
+{"type":"info","message":"Ana comentó en tu tip \"Camina o usa bicicleta\": \"Ishddvjd\"","read":false,"userId":"user-ana","createdAt":"2026-03-11T14:49:00.587Z"}
